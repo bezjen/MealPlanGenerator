@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: head"></head>
+<link rel="stylesheet" href="/css/bootstrap-select.min.css">
+<link rel="stylesheet" href="/css/ajax-bootstrap-select.css">
+<body>
+	<header th:insert="fragments/general.html :: header" th:remove="tag"></header>
+	<main role="main" class="py-5">
+		<div class="container bg-light shadow rounded py-5 px-5">
+			<form id="formId" method="POST" enctype="multipart/form-data">
+				<div th:include="fragments/general.html :: messages"></div>
+				<div>
+					<div class="form-group row">
+						<label for="dietImage" class="col-sm-2 col-form-label" th:text="#{general.image}"></label>
+						<div class="col-sm-10">
+							<div class="cz-file-drop-area form-group">
+								<div class="cz-file-drop-icon czi-cloud-upload"></div>
+				                <span class="cz-file-drop-message" th:text="#{buttons.upload.image.diet}"></span>
+				                <input id="dietImage" name="dietImage" multiple="multiple" class="cz-file-drop-input" accept="image/png, image/jpeg" type="file">
+				                <button class="cz-file-drop-btn btn btn-primary btn-sm mb-2" type="button" th:text="#{buttons.upload.image.selectfile}"></button>
+				                <small class="form-text text-muted" th:text="#{buttons.upload.image.maxsize}"></small>
+			                </div>
+						</div>
+					</div>
+					<div th:include="fragments/localizedEntity.html :: locales"></div>
+					<!--Description-->
+					<div class="form-group row">
+						<label for="enDescription" class="col-sm-2 col-form-label" th:text="#{localizedEntity.diet.enDescription}"></label>
+						<div class="col-sm-10">
+							<textarea id="enDescription" name="enDescription" th:text="${model.enDescription}"
+									  type="text" class="form-control" rows="5" required></textarea>
+							<!-- 							<div class="invalid-feedback" th:text="#{messages.error.addRecipe.recipeName}"></div> -->
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="ruDescription" class="col-sm-2 col-form-label" th:text="#{localizedEntity.diet.ruDescription}"></label>
+						<div class="col-sm-10">
+							<textarea id="ruDescription" name="ruDescription" th:text="${model.ruDescription}"
+									  type="text" class="form-control" rows="5" required></textarea>
+							<!-- 							<div class="invalid-feedback" th:text="#{messages.error.addRecipe.recipeName}"></div> -->
+						</div>
+					</div>
+					<button id="save"
+						class="btn btn-outline-primary btn-lg btn-block" th:text="#{buttons.save}"></button>
+				</div>
+			</form>
+		</div>
+	</main>
+	<div th:replace="fragments/general.html :: footer"></div>
+	<script src="/js/bootstrap-select.js"></script>
+	<script src="/js/bootstrap-select-ru.js"></script>
+</body>
+</html>

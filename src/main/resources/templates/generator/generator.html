@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: head"></head>
+<link rel="stylesheet" href="/css/bootstrap-select.min.css">
+<link rel="stylesheet" href="/css/ajax-bootstrap-select.css">
+<body>
+	<div th:replace="fragments/general.html :: header"></div>
+	<main role="main" class="py-5">
+		<div class="container bg-light shadow rounded py-5 px-5">
+			<div class="row pt-3 mt-md-2">
+				<!-- Filter-->
+				<div th:replace="fragments/generator.html :: filter"></div>
+				<section class="col-lg-8">
+					<div class="container">
+						<div th:replace="fragments/generator.html :: generatorFields"></div>
+						<div th:replace="fragments/generator.html :: generatorResult"></div>
+					</div>
+				</section>
+		</div>
+	</div>
+	<!-- Toolbar for handheld devices-->
+	<div class="cz-handheld-toolbar">
+		<div class="d-table table-fixed w-100">
+			<a class="d-table-cell cz-handheld-toolbar-item" href="#shop-sidebar" data-toggle="sidebar">
+				<span class="cz-handheld-toolbar-icon"><i class="czi-filter-alt"></i></span>
+				<th:span th:text="#{buttons.filters}" class="cz-handheld-toolbar-label"></th:span>
+			</a>
+			<a class="d-table-cell cz-handheld-toolbar-item" href="#navbarCollapse" data-toggle="collapse" onclick="window.scrollTo(0, 0)">
+				<span class="cz-handheld-toolbar-icon"><i class="czi-menu"></i></span>
+				<th:span th:text="#{buttons.menu}" class="cz-handheld-toolbar-label"></th:span>
+			</a>
+		</div>
+	</div>
+	</main>
+	<div th:replace="fragments/general.html :: footer"></div>
+	<script src="/js/bootstrap-select.js"></script>
+	<script src="/js/bootstrap-select-ru.js"></script>
+	<script src="/js/ajax-bootstrap-select.js"></script>
+	<script src="/js/whattoeat/generator.js" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+alter table t_diet add column image_url varchar(255) default '/img/dietThumbnail.png' not null;

@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: head"></head>
+<body>
+	<div th:replace="fragments/general.html :: header"></div>
+	<main role="main" class="py-5">
+		<div class="py-5">
+			<div class="py-5">
+				<div class="container bg-light shadow rounded-lg py-5 px-5 col col-lg-6">
+					<div th:include="fragments/general.html :: messages"></div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<div th:replace="fragments/general.html :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,1 @@
+drop table t_food_product_diet;

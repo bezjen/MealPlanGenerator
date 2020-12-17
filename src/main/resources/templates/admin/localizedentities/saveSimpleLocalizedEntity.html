@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: head"></head>
+<body>
+	<header th:insert="fragments/general.html :: header" th:remove="tag"></header>
+	<main role="main" class="py-5">
+		<div class="container bg-light shadow rounded py-5 px-5">
+			<form id="formId" method="POST">
+				<div th:include="fragments/general.html :: messages"></div>
+				<div>
+					<div th:include="fragments/localizedEntity.html :: locales"></div>
+					<button id="saveLocalizedEntity"
+						class="btn btn-outline-primary btn-lg btn-block" th:text="#{buttons.save}"></button>
+				</div>
+			</form>
+		</div>
+	</main>
+	<div th:replace="fragments/general.html :: footer"></div>
+</body>
+</html>

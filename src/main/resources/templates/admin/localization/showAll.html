@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: head"></head>
+<body>
+	<div th:replace="fragments/general.html :: header"></div>
+	<main role="main" class="py-5">
+		<div class="container bg-light shadow rounded py-5 px-5">
+			<!-- Recipes grid-->
+			<div class="row mx-n2" id="recipesGrid">
+				<!-- Recipe-->
+				<div class="col-md-4 col-sm-6 px-2 mb-4" th:each="recipe: ${recipes}">
+					<div class="card product-card">
+						<a class="card-img-top d-block overflow-hidden" th:href="'/admin/recipes/localization/' + ${recipe.id}">
+							<img th:src="${recipe.imageUrl}" alt="Product"></a>
+						<div class="card-body pb-1"><a class="h5" th:href="'/admin/recipes/localization/' + ${recipe.id}" th:text="${recipe.localization('ru')}"></a>
+							<div class="product-title font-size-sm" th:if="${recipe.description != null}" th:text="${#strings.abbreviate(recipe.description.localization('ru'),120)}"></div>
+							<div class="product-meta d-block font-size-xs pb-1">
+								<div th:remove="tag" th:utext="'<strong>' + #{recipe.ingredients} + ':</strong>'" ></div>
+								<div th:remove="tag" th:each="recipeIngredient, iterator: ${recipe.recipeIngredients}">
+									<div th:remove="tag" th:text="!${iterator.last} ? ${recipeIngredient.foodProduct.localization('ru')} + ', '
+																						: ${recipeIngredient.foodProduct.localization('ru')}"></div>
+								</div>
+							</div>
+							<div class="product-meta d-block font-size-xs pb-1" 
+								th:utext="'<strong>' + #{recipe.prepTime} + ': ' + '</strong>' + ${recipe.prepTime} + ' ' + #{recipe.minutes}"></div>
+							<div class="product-meta d-block font-size-xs pb-1" 
+								th:utext="'<strong>' + #{recipe.cookingTime} + ': ' + '</strong>' + ${recipe.cookingTime} + ' ' + #{recipe.minutes}"></div>
+							<div class="product-meta d-block font-size-xs pb-1" 
+								th:utext="'<strong>' + #{recipe.primaryCookingMethod} + ': ' + '</strong>' + ${recipe.primaryCookingMethod.localization('ru')}"></div>
+						</div>
+						<!--Hidden block-->
+						<div class="card-body card-body-hidden">
+							<div class="d-flex flex-wrap justify-content-between align-items-center pb-1">
+								<div class="d-flex align-items-center font-size-sm mb-2">
+									<a class="blog-entry-meta-link" href="#" th:text="${recipe.author.username}"></a>
+									<span class="blog-entry-meta-divider"></span>
+									<span th:text="${#dates.format(recipe.date, 'dd-MMMMMMMM-yyyy')}"></span></div>
+							</div>
+						</div>
+					</div>
+					<hr class="d-sm-none">
+				</div>
+			</div>
+		</div>
+	</main>
+	<div th:replace="fragments/general.html :: footer"></div>
+</body>
+</html>

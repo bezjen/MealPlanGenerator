@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	
+	<div th:fragment="generatedMeal" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+		<tr  class="d-flex">
+			<td class="col-2"><img class="img-fluid shadow rounded-lg" width="100" th:src="${recipe.imageUrl}"></td>
+			<td class="col-8">
+				<a class="h6" th:text="${recipe.localization(#locale)}" th:id="${recipe.id}" th:href="|@{/recipes/show/}${recipe.id}?lang=${#locale}|"></a>
+			</td>
+			<td>
+				<button type="button" class="ml-2 mb-1 close">
+					<i class="h4 text-body czi-loading"></i>
+				</button>
+				<span class="spinner-border spinner-border-sm" role="status" hidden="true"></span>
+			</td>
+		</tr>
+	</div>
+	<!-- Entry-->
+	<article th:fragment="randomRecipe" id="randomRecipe" class="grid-item">
+		<div class="card">
+			<div class="card-body">
+				<h2 class="h4 blog-entry-title mb-3" th:text="#{home.randomRecipe}"></h2>
+				<div class="row">
+					<div class="col">
+						<a th:href="'/recipes/show/' + ${randomRecipe.id}">
+							<img class="img-fluid shadow rounded-lg" width="75" th:src="${randomRecipe.imageUrl}" alt="Product">
+							<span class="h6 font-size-md" th:href="'/recipes/show/' + ${randomRecipe.id}" th:text="${randomRecipe.localization(#locale)}"></span></a>
+					</div>
+					<div class="col-2">
+						<button type="button" class="close mt-2">
+							<i class="h2 text-body czi-loading"></i>
+						</button>
+						<span class="spinner-border mt-2 d-none" role="status"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</article>
+
+</body>
+</html>

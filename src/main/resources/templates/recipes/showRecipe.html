@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: head"></head>
+<body>
+	<header th:insert="fragments/general.html :: header" th:remove="tag"></header>
+	<main role="main" class="py-5">
+<!--		 Page Content-->
+			<div class="container bg-light shadow rounded py-5 px-5">
+				<div class="row md-2">
+					<section class="col-lg-12">
+						<!--Author, date-->
+						<div class="d-flex flex-wrap justify-content-between align-items-center mt-n1">
+							<div class="d-flex align-items-center font-size-sm mb-2">
+								<a class="blog-entry-meta-link" href="#" th:text="${recipe.author.username}"></a>
+								<span class="blog-entry-meta-divider"></span>
+								<span th:text="${#dates.format(recipe.date, 'dd-MMMMMMMM-yyyy')}"></span>
+							</div>
+						</div>
+						<!-- Recipe category-->
+						<div class="row font-size-md card-body">
+							<span th:text="#{recipe.category} + ': '" th:remove="tag"></span>
+							<span th:text="${recipe.recipeCategory.getCategoryString(#locale)}" th:remove="tag"></span>
+						</div>
+						<div class="row pb-2">
+							<div class="cz-gallery col-sm-2">
+								<a th:with="extensionIndex=${recipe.imageUrl.lastIndexOf('.')}"
+								   th:href="${recipe.imageUrl.substring(0, extensionIndex)} + '-orig' + ${recipe.imageUrl.substring(extensionIndex)}"
+								   class="gallery-item card-img-top"
+								   th:data-sub-html="${recipe.localization(#locale)}">
+									<img class="img-fluid float-left shadow rounded-lg"
+										 width="200"
+										 th:src="${recipe.imageUrl}"
+										 th:alt="${recipe.localization(#locale)}">
+								</a>
+							</div>
+							<!--Recipe info-->
+							<div class="col-sm-10 mt-3 border-0 box-shadow-sm">
+								<div class="row">
+									<div th:utext="'<strong>' + #{recipe.prepTime} + ': ' + '</strong>' + ${recipe.prepTime} + ' ' + #{recipe.minutes}"
+											class="col-5 mb-3"></div>
+									<div th:utext="'<strong>' + #{recipe.primaryCookingMethod} + ': ' + '</strong>' + ${recipe.primaryCookingMethod.localization(#locale)}"
+										 class="col-5"></div>
+									<div th:utext="'<strong>' + #{recipe.cookingTime} + ': ' + '</strong>' + ${recipe.cookingTime} + ' ' + #{recipe.minutes}"
+										 class="col-5 mb-3" ></div>
+									<div class="col-5" th:if="${not #lists.isEmpty(recipe.secondaryCookingMethods)}">
+										<div th:utext="'<strong>' + #{recipe.secondaryCookingMethods} + ': ' + '</strong>'"></div>
+										<div
+											th:each="secondaryCookingMethod, iter : ${recipe.secondaryCookingMethods}"
+											th:text="!${iter.last} ? ${secondaryCookingMethod.localization(#locale)} + ', ':
+											${secondaryCookingMethod.localization(#locale)}"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--Description-->
+						<div  th:if="${recipe.description != null && recipe.description.localization(#locale) != null && recipe.description.localization(#locale) != ''}"
+							  th:text="${recipe.description.localization(#locale)}" class="row card-body">
+						</div>
+						<!-- Recipe additional info-->
+						<label class="h5 row" th:if="${not #lists.isEmpty(recipe.diets) || recipe.snack || recipe.breakfast}" th:text="#{general.pages.additionalInfo} + ': '"></label>
+						<div class="row ml-2" th:if="${not #lists.isEmpty(recipe.diets)}">
+							<div
+									th:remove="tag"
+									th:utext="#{diets} + ': '"></div>
+							<div
+									th:remove="tag"
+									th:each="diet, iter : ${recipe.diets}"
+									th:text="!${iter.last} ? ${diet.localization(#locale)} + ', ':
+											${diet.localization(#locale)}"></div>
+						</div>
+						<div th:if="${recipe.snack}" class="row ml-2">
+							<div th:utext="#{recipe.isSnack}"></div>
+						</div>
+						<div th:if="${recipe.breakfast}" class="row ml-2 mb-3">
+							<div th:utext="#{recipe.isBreakfastOrBrunch}"></div>
+						</div>
+						<!-- Recipe content-->
+						<div th:text="#{recipe.ingredients} + ':'" class="h5 row mb-3 mt-3"></div>
+						<!--Servings number-->
+						<div class="row ml-2 mb-2">
+							<div th:utext="#{recipe.servingsNumber} + ': ' + ${recipe.servingsNumber}"></div>
+						</div>
+						<!--Ingredients-->
+						<div class="table-responsive ">
+							<table class="table table-striped table-sm">
+								<tbody>
+									<tr th:each="recipeIngredient,iterator: ${recipe.recipeIngredients}">
+										<th scope="row" th:text="${iterator.index} + 1"></th>
+										<td th:text="${recipeIngredient.foodProduct.localization(#locale)}"></td>
+										<td th:if="${recipeIngredient.amount != null}"
+											th:text="${#numbers.formatDecimal(recipeIngredient.amount, 0,
+													T(Math).round(recipeIngredient.amount) == recipeIngredient.amount ? 0 : 1)} +
+													' ' + ${recipeIngredient.measure.localization(#locale)}"></td>
+										<td th:if="${recipeIngredient.amount == null}"
+											th:text="${recipeIngredient.measure.localization(#locale)}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!--Steps-->
+						<div th:if="${not #lists.isEmpty(recipe.steps)}">
+							<div th:text="#{recipe.steps} + ':'" class="row mt-3 h5"></div>
+							<table class="table table-responsive">
+								<tr th:each="step: ${recipe.steps}">
+									<th th:text="${step.stepIndex}"></th>
+									<td th:text="${step.localization(#locale)}"></td>
+									<td class="cz-gallery">
+										<a th:if="${step.imageUrl != null}"
+										   th:with="extensionIndex=${step.imageUrl.lastIndexOf('.')}"
+										   th:href="${step.imageUrl.substring(0, extensionIndex)} + '-orig' + ${step.imageUrl.substring(extensionIndex)}"
+										   class="gallery-item card-img-top"
+										   th:data-sub-html="${recipe.localization(#locale)} + ' - ' + #{recipe.step(${step.stepIndex})}">
+											<img class="img-fluid float-left shadow rounded-lg"
+												 th:src="${step.imageUrl}"
+												 th:alt="${recipe.localization(#locale)}">
+										</a>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</section>
+				</div>
+			</div>
+	</main>
+	<div th:replace="fragments/general.html :: footer"></div>
+</body>
+</html>

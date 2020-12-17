@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: head"></head>
+<body>
+	<div th:replace="fragments/general.html :: header"></div>
+	<main role="main" class="py-5">
+		<div class="container">
+				<!-- Entries grid-->
+				<div data-columns="3">
+					<!-- Entry-->
+					<article class="grid-item">
+						<div class="card">
+							<div class="card-body">
+								<h2 class="h4 blog-entry-title mb-3" th:text="#{home.breakfastRecipes}"></h2>
+								<div class="row mt-2" th:each="recipe: ${breakfastRecipes}">
+									<a class="col" th:href="'/recipes/show/' + ${recipe.id}">
+										<img class="img-fluid shadow rounded-lg" width="75" th:src="${recipe.imageUrl}" alt="Product">
+										<span class="h6 font-size-md" th:href="'/recipes/show/' + ${recipe.id}" th:text="${recipe.localization(#locale)}"></span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</article>
+					<!-- Entry-->
+					<article class="grid-item">
+						<div class="card">
+							<img class="card-img-top" src="/img/calendar.jpg">
+							<div class="card-body">
+								<h2 class="h4 blog-entry-title"><a href="/generator" th:text="#{general.pages.mealplangenerator}"></a></h2>
+								<p class="font-size" th:utext="#{home.generator}"></p>
+								<p class="font-size" th:text="#{home.generator.shoppingList}"></p>
+							</div>
+						</div>
+					</article>
+					<!-- Entry-->
+					<article class="grid-item">
+						<div class="card">
+							<div class="card-body">
+								<h2 class="h4 blog-entry-title mb-3" th:text="#{home.newestRecipes}"></h2>
+								<div class="row mt-2" th:each="recipe: ${newestRecipes}">
+									<a class="col" th:href="'/recipes/show/' + ${recipe.id}">
+										<img class="img-fluid shadow rounded-lg" width="75" th:src="${recipe.imageUrl}" alt="Product">
+										<span class="h6 font-size-md" th:href="'/recipes/show/' + ${recipe.id}" th:text="${recipe.localization(#locale)}"></span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</article>
+					<article th:replace="fragments/home.html :: randomRecipe"></article>
+					<!-- Entry-->
+					<article class="grid-item">
+						<div class="card">
+							<div class="card-body">
+								<h2 class="h4 blog-entry-title" th:text="#{general.footer.aboutUs}"></h2>
+								<p class="font-size" th:text="#{home.aboutUs}"></p>
+								<p class="font-size" th:text="#{home.aboutUs.feedback}"></p>
+							</div>
+						</div>
+					</article>
+				</div>
+		</div>
+	</main>
+	<div th:replace="fragments/general.html :: footer"></div>
+	<script src="/js/whattoeat/home.js" type="text/javascript"></script>
+</body>
+</html>

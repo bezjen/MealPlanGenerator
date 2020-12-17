@@ -1,0 +1,1 @@
+alter table t_user add column is_blocked bit not null;

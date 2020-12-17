@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: head"></head>
+<body>
+	<header th:insert="fragments/general.html :: header" th:remove="tag"></header>
+	<main role="main" class="py-5">
+<!--		 Page Content-->
+			<div class="container bg-light shadow rounded py-5 px-5">
+				<div class="col pt-3 mt-md-2">
+					<section class="col-lg-12">
+						<!-- Food products-->
+						<div th:each="categoryGroup: ${foodProducts}">
+						<div class="h3 text-left mt-4 mb-4 ml-3" th:text="${categoryGroup.key.localization(#locale)}"></div>
+							<div class="table-responsive" th:each="category: ${categoryGroup.value}">
+								<div class="h6 text-left" th:text="${category.key.localization(#locale)}"></div>
+								<table class="table table-bordered table-sm">
+									<thead class="thead-dark">
+									<tr>
+										<th>#</th>
+										<th th:text="#{general.img}"></th>
+										<th th:text="#{name}"></th>
+										<th th:text="#{foodEnergy.proteins}"></th>
+										<th th:text="#{foodEnergy.fat}"></th>
+										<th th:text="#{foodEnergy.carbohydrates}"></th>
+										<th th:text="#{foodEnergy.kilocalories}"></th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr th:each="foodProduct,iterator: ${category.value}">
+										<th scope="row" th:text="${iterator.index} + 1"></th>
+										<td><img class="img-fluid shadow rounded-lg" width="50" th:src="${foodProduct.imageUrl}"></td>
+										<td th:text="${foodProduct.localization(#locale)}"></td>
+										<td th:text="${foodProduct.proteins}"></td>
+										<td th:text="${foodProduct.fat}"></td>
+										<td th:text="${foodProduct.carbohydrates}"></td>
+										<td th:text="${foodProduct.kilocalories}"></td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+	</main>
+	<div th:replace="fragments/general.html :: footer"></div>
+</body>
+</html>

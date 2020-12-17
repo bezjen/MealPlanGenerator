@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: head"></head>
+<body>
+	<div th:replace="fragments/general.html :: header"></div>
+	<main role="main" class="py-5">
+	<div class="container bg-light shadow rounded py-5 px-5">
+		<div class="row">
+			<!-- Sidebar-->
+			<aside class="col-lg-4 pt-4 pt-lg-0">
+				<div
+					class="cz-sidebar-static rounded-lg box-shadow-lg px-0 pb-0 mb-5 mb-lg-0">
+					<div class="px-4 mb-4">
+						<div class="media align-items-center">
+							<div class="img-thumbnail rounded-circle position-relative"
+								style="width: 6.375rem;">
+								<img class="rounded-circle" src="/img/user/avatar.jpg" alt="">
+							</div>
+							<div class="media-body pl-3">
+								<h3 th:text="${user.username}" class="font-size-base mb-0"></h3>
+								<span th:text="${user.email}" class="text-accent font-size-sm"></span>
+							</div>
+						</div>
+					</div>
+					<div class="bg-secondary px-4 py-3">
+						<h3 class="font-size-sm mb-0 text-muted"
+							th:text="#{account.general.recipes}"></h3>
+					</div>
+					<ul class="list-unstyled mb-0">
+						<li class="border-bottom mb-0"><span
+							class="nav-link-style d-flex align-items-center px-4 py-3 active">
+								<i class="czi-book opacity-60 mr-2"></i><span
+								th:text="#{account.general.myrecipes}" th:remove="tag"></span>
+						</span></li>
+					</ul>
+					<div class="bg-secondary px-4 py-3">
+						<h3 class="font-size-sm mb-0 text-muted"
+							th:text="#{account.general.accountsettings}"></h3>
+					</div>
+					<ul class="list-unstyled mb-0">
+						<li class="border-bottom mb-0"><a
+							class="nav-link-style d-flex align-items-center px-4 py-3"
+							href="/account/settings"> <i class="czi-user opacity-60 mr-2"></i><span
+								th:text="#{account.general.profileinfo}" th:remove="tag"></span>
+						</a></li>
+						<li class="d-lg-none border-top mb-0"><a
+							class="nav-link-style d-flex align-items-center px-4 py-3"
+							href="/signout"> <i class="czi-sign-out opacity-60 mr-2"></i><span
+								th:text="#{account.general.signout}" th:remove="tag"></span>
+						</a></li>
+					</ul>
+				</div>
+			</aside>
+			<!-- Content  -->
+			<section class="col-lg-8">
+				<div th:replace="fragments/general.html :: messages"></div>
+				<!-- Toolbar-->
+				<!-- Toolbar-->
+				<div
+					class="d-none d-lg-flex justify-content-between align-items-center pt-lg-3 pb-4 pb-lg-5 mb-lg-3">
+					<h6 class="font-size-base mb-0">
+						<span th:text="#{account.recipes.yourrecipes}" th:remove="tag"></span>
+						<span th:text="${recipes.size()}"
+							class="badge badge-secondary font-size-sm text-body align-middle ml-2"></span>
+					</h6>
+					<a class="btn btn-primary btn-sm" href="/signout"> <i
+						class="czi-sign-out mr-2"></i> <span
+						th:text="#{account.general.signout}" th:remove="tag"></span>
+					</a>
+				</div>
+				<!-- Recipes-->
+				<div
+					class="d-sm-flex justify-content-between mt-lg-4 mb-4 pb-3 pb-sm-2 border-bottom"
+					th:if="${recipes.size() == 0}">
+					<h2 class="product-title font-size-base mb-2"
+						th:text="#{account.recipes.empty}"></h2>
+				</div>
+				<div
+					class="d-sm-flex justify-content-between mt-lg-4 mb-4 pb-3 pb-sm-2 border-bottom"
+					th:each="recipe: ${recipes}">
+					<div
+						class="media media-ie-fix d-block d-sm-flex text-center text-sm-left">
+						<a class="d-block position-relative mb-3 mb-sm-0 mr-sm-4 mx-auto"
+							th:href="'/recipes/show/' + ${recipe.id}" style="width: 10rem;">
+							<span th:if="${!recipe.approved}"
+							class="badge badge-warning badge-shadow"
+							th:text="#{account.recipes.onapproval}"></span> <span
+							th:if="${recipe.approved}"
+							class="badge badge-success badge-shadow"
+							th:text="#{account.recipes.approved}"></span> 
+							<img class="rounded-lg" th:src="${recipe.imageUrl}"
+							th:alt="${recipe.localization(#locale)}" alt="">
+						</a>
+						<div class="media-body pt-2">
+							<h3 class="product-title font-size-base mb-2">
+								<a th:href="'/recipes/show/' + ${recipe.id}"
+									th:text="${recipe.localization(#locale)}"></a>
+							</h3>
+							<div class="product-meta d-block font-size-xs pb-1">
+								<div th:remove="tag"
+									th:utext="'&lt;strong&gt;' + #{recipe.ingredients} + ':&lt;/strong&gt;'"></div>
+								<div th:remove="tag"
+									th:each="recipeIngredient, iterator: ${recipe.recipeIngredients}">
+									<div th:remove="tag"
+										th:text="!${iterator.last} ? ${recipeIngredient.foodProduct.localization(#locale)} + ', '
+															: ${recipeIngredient.foodProduct.localization(#locale)}"></div>
+								</div>
+							</div>
+							<div class="product-meta d-block font-size-xs pb-1"
+								th:utext="'&lt;strong&gt;' + #{recipe.prepTime} + ': ' + '&lt;/strong&gt;' + ${recipe.prepTime} + ' ' + #{recipe.minutes}"></div>
+							<div class="product-meta d-block font-size-xs pb-1"
+								th:utext="'&lt;strong&gt;' + #{recipe.cookingTime} + ': ' + '&lt;/strong&gt;' + ${recipe.cookingTime} + ' ' + #{recipe.minutes}"></div>
+							<div class="product-meta d-block font-size-xs pb-1"
+								th:utext="'&lt;strong&gt;' + #{recipe.primaryCookingMethod} + ': ' + '&lt;/strong&gt;' + ${recipe.primaryCookingMethod.localization(#locale)}"></div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+	</main>
+	<div th:replace="fragments/general.html :: footer"></div>
+</body>
+</html>

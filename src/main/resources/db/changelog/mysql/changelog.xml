@@ -1,0 +1,31 @@
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+	<include file="2020-03-04--01-initial-schema-creation.xml" relativeToChangelogFile="true"/>
+	<include file="2020-03-05--01-add-image-url-to-food-products.xml" relativeToChangelogFile="true"/>
+	<include file="2020-03-06--01-add-image-url-to-recipe-and-steps.xml" relativeToChangelogFile="true"/>
+	<include file="2020-03-12--01-add-min-age-to-food-products.xml" relativeToChangelogFile="true"/>
+	<include file="2020-03-13--01-add-min-age-to-food-products-and-recipes.xml" relativeToChangelogFile="true"/>
+	<include file="2020-03-13--02-add-is-common-field-for-foodproduct.xml" relativeToChangelogFile="true"/>
+	<include file="2020-03-13--03-add-diets.xml" relativeToChangelogFile="true"/>
+	<include file="2020-03-13--04-add-food-product-categories.xml" relativeToChangelogFile="true"/>
+	<include file="2020-03-16--01-remove-diet-from-food-products.xml" relativeToChangelogFile="true"/>
+	<include file="2020-03-16--02-additional-recipe-properties.xml" relativeToChangelogFile="true"/>
+	<include file="2020-03-18--01-additional-measure-properties.xml" relativeToChangelogFile="true"/>
+	<include file="2020-03-19--01-set-not-null-properties.xml" relativeToChangelogFile="true"/>
+	<include file="2020-04-04--01-add-recipe-categories.xml" relativeToChangelogFile="true"/>
+	<include file="2020-04-24--01-additional-recipe-properties.xml" relativeToChangelogFile="true"/>
+	<include file="2020-04-25--01-link-recipe-and-diet-tables.xml" relativeToChangelogFile="true"/>
+	<include file="2020-05-01--01-add-servings-number-to-recipe.xml" relativeToChangelogFile="true"/>
+	<include file="2020-05-13--01-add-verification-token.xml" relativeToChangelogFile="true"/>
+	<include file="2020-05-15--01-remove-first-and-last-name.xml" relativeToChangelogFile="true"/>
+	<include file="2020-05-15--02-remove-optional-from-ingredients.xml" relativeToChangelogFile="true"/>
+	<include file="2020-05-15--03-add-blocked-property-to-users.xml" relativeToChangelogFile="true"/>
+	<include file="2020-07-05--01-move-localizations-from-separate-table.xml" relativeToChangelogFile="true"/>
+	<include file="2020-07-07--01-remove-unused-localization-table.xml" relativeToChangelogFile="true"/>
+	<include file="2020-10-26--01-add-additional-diet-properties.xml" relativeToChangelogFile="true"/>
+	<include file="2020-10-26--02-add-diet-description.xml" relativeToChangelogFile="true"/>
+		
+</databaseChangeLog>

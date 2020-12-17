@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: head"></head>
+<body>
+	<div th:replace="fragments/general.html :: header"></div>
+	<main role="main">
+		<div class="container py-5 mb-lg-3">
+			<div class="container bg-light shadow rounded">
+				<div class="row justify-content-center pt-lg-4 text-center">
+					<div class="col-lg-5 col-md-7 col-sm-9">
+						<h1 class="display-404" th:text="#{page.error.error}"></h1>
+						<h2 class="h3 mb-5" th:text="#{page.error.text}"></h2>
+						<p class="font-size-md mb-4">
+							<u th:text="#{page.error.404.links}"></u>
+						</p>
+					</div>
+				</div>
+				<div class="row justify-content-center">
+					<div class="col-xl-8 col-lg-10">
+						<div class="row">
+							<div class="col-sm-6 mb-3">
+								<a class="card h-100 border-0 box-shadow-sm" href="/">
+									<div class="card-body">
+										<div class="media align-items-center"><i class="czi-home text-primary h4 mb-0"></i>
+											<div class="media-body pl-3">
+												<h5 class="font-size-sm mb-0" th:text="#{general.pages.home}"></h5>
+												<span class="text-muted font-size-ms" th:text="#{page.error.404.homepageText}"></span>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+							<div class="col-sm-6 mb-3"><a class="card h-100 border-0 box-shadow-sm" href="/feedback">
+								<div class="card-body">
+									<div class="media align-items-center"><i class="czi-help text-info h4 mb-0"></i>
+										<div class="media-body pl-3">
+											<h5 class="font-size-sm mb-0" th:text="#{general.footer.feedback}"></h5>
+											<span class="text-muted font-size-ms"  th:text="#{page.error.404.feedbackText}"></span>
+										</div>
+									</div>
+								</div></a></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<div th:replace="fragments/general.html :: footer"></div>
+</body>
+</html>

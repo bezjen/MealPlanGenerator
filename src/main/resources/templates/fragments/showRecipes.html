@@ -1,0 +1,272 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<div th:fragment="filter" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+		<aside class="col-lg-4" id="recipesFilter">
+			<!-- Sidebar-->
+			<div class="cz-sidebar rounded-lg box-shadow-lg" id="shop-sidebar">
+				<div class="cz-sidebar-header box-shadow-sm">
+					<button class="close ml-auto" type="button" data-dismiss="sidebar" aria-label="Close">
+						<th:span th:text="#{buttons.closeSidebar}" class="d-inline-block font-size-xs font-weight-normal align-middle"></th:span>
+						<span class="d-inline-block align-middle ml-2" aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="cz-sidebar-body" data-simplebar data-simplebar-auto-hide="true">
+					<div class="widget widget-categories mb-4 pb-4 border-bottom">
+						<!--Ingredients-->
+						<div class="mb-4 pb-4 border-bottom">
+							<h3 class="widget-title" th:text="#{recipe.ingredients}"></h3>
+							<div>
+								<label th:text="#{filter.includeIngredient}"></label>
+								<select class="form-control ingredient-product selectpicker" name="foodProductsInclude"
+										data-live-search="true" multiple data-style="form-control" id="includeIngredient"></select>
+							</div>
+						</div>
+						<!--Diets-->
+						<div class="widget cz-filter mb-4 pb-4 border-bottom">
+							<h3 th:text="#{filter.diet}" class="widget-title"></h3>
+							<div class="input-group-overlay input-group-sm mb-2">
+								<input class="cz-filter-search form-control form-control-sm appended-form-control" type="text" th:placeholder="#{filter.placeholder.search}">
+								<div class="input-group-append-overlay"><span class="input-group-text"><i class="czi-search"></i></span></div>
+							</div>
+							<ul id="diets" class="widget-list cz-filter-list list-unstyled pt-1"
+								style="max-height: 12rem;" data-simplebar data-simplebar-auto-hide="false">
+								<li class="cz-filter-item d-flex justify-content-between align-items-center mb-1" th:each="diet: ${diets}">
+									<div class="custom-control custom-checkbox">
+										<input class="custom-control-input" type="checkbox" th:id="${diet.id}">
+										<label class="custom-control-label cz-filter-item-text" th:for="${diet.id}"
+											   th:text="${diet.localization(#locale)}"></label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<!--Prep time-->
+						<div class="widget mb-4 pb-4 border-bottom">
+							<h3 th:text="#{filter.prepTime}" class="widget-title"></h3>
+							<div class="cz-range-slider" data-start-min="0" data-start-max="60" data-min="0" data-max="60" data-step="1">
+								<div class="cz-range-slider-ui"></div>
+								<div class="d-flex pb-1">
+									<div class="w-50 pr-2 mr-2">
+										<div class="input-group input-group-sm">
+											<input class="form-control cz-range-slider-value-min" type="text" id="min-prep-time">
+											<div class="input-group-prepend"><span class="input-group-text" th:text="#{filter.minutes}"></span></div>
+										</div>
+									</div>
+									<div class="w-50 pl-2">
+										<div class="input-group input-group-sm">
+											<input class="form-control cz-range-slider-value-max" type="text" id="max-prep-time">
+											<div class="input-group-prepend"><span class="input-group-text" th:text="#{filter.minutes}"></span></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--Cooking time-->
+						<div class="widget mb-4 pb-4 border-bottom">
+							<h3 th:text="#{filter.cookingTime}" class="widget-title"></h3>
+							<div class="cz-range-slider" data-start-min="0" data-start-max="240" data-min="0" data-max="240" data-step="1">
+								<div class="cz-range-slider-ui"></div>
+								<div class="d-flex">
+									<div class="w-50 pr-2 mr-2">
+										<div class="input-group input-group-sm">
+											<input class="form-control cz-range-slider-value-min" type="text" id="min-cooking-time">
+											<div class="input-group-prepend">
+												<span class="input-group-text" th:text="#{filter.minutes}"></span>
+											</div>
+										</div>
+									</div>
+									<div class="w-50 pl-2">
+										<div class="input-group input-group-sm">
+											<input class="form-control cz-range-slider-value-max" type="text" id="max-cooking-time">
+											<div class="input-group-prepend">
+												<span class="input-group-text" th:text="#{filter.minutes}"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--Cooking methods-->
+						<div class="widget cz-filter mb-4 pb-4 border-bottom">
+							<h3 th:text="#{filter.cookingMethod}" class="widget-title"></h3>
+							<div class="input-group-overlay input-group-sm mb-2">
+								<input class="cz-filter-search form-control form-control-sm appended-form-control" type="text" th:placeholder="#{filter.placeholder.search}">
+								<div class="input-group-append-overlay"><span class="input-group-text"><i class="czi-search"></i></span></div>
+							</div>
+							<ul id="cooking-methods" class="widget-list cz-filter-list list-unstyled pt-1" 
+								style="max-height: 12rem;" data-simplebar data-simplebar-auto-hide="false">
+								<li class="cz-filter-item d-flex justify-content-between align-items-center mb-1" th:each="cookingMethod: ${cookingMethods}">
+									<div class="custom-control custom-checkbox">
+										<input class="custom-control-input" type="checkbox" th:id="${cookingMethod.id}">
+										<label class="custom-control-label cz-filter-item-text" th:for="${cookingMethod.id}" 
+											th:text="${cookingMethod.localization(#locale)}"></label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<!--Breakfast-->
+						<div class="widget cz-filter mb-4 pb-4 border-bottom">
+							<h3 th:text="#{filter.isBreakfastOrBrunch}" class="widget-title"></h3>
+							<ul id="is-breakfast" class="widget-list cz-filter-list list-unstyled pt-1"
+								style="max-height: 12rem;" data-simplebar data-simplebar-auto-hide="false">
+								<li class="cz-filter-item d-flex justify-content-between align-items-center mb-1">
+									<div class="custom-control custom-radio">
+										<input class="custom-control-input" type="radio" name="is-breakfast-radio"
+											   value="" id="is-breakfast-radio-noMatter" checked>
+										<label class="custom-control-label cz-filter-item-text"
+											   for="is-breakfast-radio-noMatter"
+											   th:text="#{buttons.radio.noMatter}"></label>
+									</div>
+								</li>
+								<li class="cz-filter-item d-flex justify-content-between align-items-center mb-1">
+									<div class="custom-control custom-radio">
+										<input class="custom-control-input" type="radio" name="is-breakfast-radio"
+											   value="true" id="is-breakfast-radio-yes">
+										<label class="custom-control-label cz-filter-item-text"
+											   for="is-breakfast-radio-yes"
+											   th:text="#{buttons.radio.yes}"></label>
+									</div>
+								</li>
+								<li class="cz-filter-item d-flex justify-content-between align-items-center mb-1">
+									<div class="custom-control custom-radio">
+										<input class="custom-control-input" type="radio" name="is-breakfast-radio"
+											   value="false" id="is-breakfast-radio-no">
+										<label class="custom-control-label cz-filter-item-text"
+											   for="is-breakfast-radio-no"
+											   th:text="#{buttons.radio.no}"></label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<!--Snack-->
+						<div class="widget cz-filter mb-4 pb-4">
+							<h3 th:text="#{filter.isSnack}" class="widget-title"></h3>
+							<ul id="is-snack" class="widget-list cz-filter-list list-unstyled pt-1"
+								style="max-height: 12rem;" data-simplebar data-simplebar-auto-hide="false">
+								<li class="cz-filter-item d-flex justify-content-between align-items-center mb-1">
+									<div class="custom-control custom-radio">
+										<input class="custom-control-input" type="radio" name="is-snack-radio"
+											   value="" id="is-snack-radio-noMatter" checked>
+										<label class="custom-control-label cz-filter-item-text"
+											   for="is-snack-radio-noMatter"
+											   th:text="#{buttons.radio.noMatter}"></label>
+									</div>
+								</li>
+								<li class="cz-filter-item d-flex justify-content-between align-items-center mb-1">
+									<div class="custom-control custom-radio">
+										<input class="custom-control-input" type="radio" name="is-snack-radio"
+											   value="true" id="is-snack-radio-yes">
+										<label class="custom-control-label cz-filter-item-text"
+											   for="is-snack-radio-yes"
+											   th:text="#{buttons.radio.yes}"></label>
+									</div>
+								</li>
+								<li class="cz-filter-item d-flex justify-content-between align-items-center mb-1">
+									<div class="custom-control custom-radio">
+										<input class="custom-control-input" type="radio" name="is-snack-radio"
+											   value="false" id="is-snack-radio-no">
+										<label class="custom-control-label cz-filter-item-text"
+											   for="is-snack-radio-no"
+											   th:text="#{buttons.radio.no}"></label>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<button id="recipes-filter-button" class="btn btn-primary" type="button" th:text="#{buttons.applyFilters}"></button>
+				</div>
+			</div>
+		</aside>
+	</div>
+
+	<div th:fragment="recipesSection" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+		<section id="recipesSection" class="col-lg-8">
+			<!-- Recipes grid-->
+			<div class="row mx-n2" id="recipesGrid">
+				<!-- Recipe-->
+				<div class="col-md-4 col-sm-6 px-2 mb-4" th:each="recipe: ${recipes}">
+					<div class="card product-card">
+						<a class="card-img-top d-block overflow-hidden" th:href="'/recipes/show/' + ${recipe.id}">
+							<img th:src="${recipe.imageUrl}" alt="Product"></a>
+						<div class="card-body pb-1"><a class="h5" th:href="'/recipes/show/' + ${recipe.id}" th:text="${recipe.localization(#locale)}"></a>
+							<div class="product-title font-size-sm" th:if="${recipe.description != null}" th:text="${#strings.abbreviate(recipe.description.localization(#locale),120)}"></div>
+							<div class="product-meta d-block font-size-xs pb-1">
+								<div th:remove="tag" th:utext="'<strong>' + #{recipe.ingredients} + ':</strong>'" ></div>
+								<div th:remove="tag" th:each="recipeIngredient, iterator: ${recipe.recipeIngredients}">
+									<div th:remove="tag" th:text="!${iterator.last} ? ${recipeIngredient.foodProduct.localization(#locale)} + ', '
+																						: ${recipeIngredient.foodProduct.localization(#locale)}"></div>
+								</div>
+							</div>
+							<div class="product-meta d-block font-size-xs pb-1" 
+								th:utext="'<strong>' + #{recipe.prepTime} + ': ' + '</strong>' + ${recipe.prepTime} + ' ' + #{recipe.minutes}"></div>
+							<div class="product-meta d-block font-size-xs pb-1" 
+								th:utext="'<strong>' + #{recipe.cookingTime} + ': ' + '</strong>' + ${recipe.cookingTime} + ' ' + #{recipe.minutes}"></div>
+							<div class="product-meta d-block font-size-xs pb-1" 
+								th:utext="'<strong>' + #{recipe.primaryCookingMethod} + ': ' + '</strong>' + ${recipe.primaryCookingMethod.localization(#locale)}"></div>
+						</div>
+						<!--Hidden block-->
+						<div class="card-body card-body-hidden">
+							<div class="d-flex flex-wrap justify-content-between align-items-center pb-1">
+								<div class="d-flex align-items-center font-size-sm mb-2">
+									<a class="blog-entry-meta-link" href="#" th:text="${recipe.author.username}"></a>
+									<span class="blog-entry-meta-divider"></span>
+									<span th:text="${#dates.format(recipe.date, 'dd-MMMMMMMM-yyyy')}"></span></div>
+							</div>
+						</div>
+					</div>
+					<hr class="d-sm-none">
+				</div>
+			</div>
+			<hr class="my-3">
+			<div th:replace="fragments/showRecipes.html :: recipesPagination"></div>
+		</section>
+	</div>
+
+	<div th:fragment="recipesPagination" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+		<!-- Pagination-->
+		<nav id="recipesPagination" class="d-flex justify-content-between pt-2">
+			<ul class="pagination">
+				<li class="page-item">
+					<button id="prev-page" type="button" class="page-link" th:if="${currentPage != 1}">
+						<i class="czi-arrow-left mr-2"></i>
+						<span th:text="#{buttons.prev}"></span>
+					</button>
+					<button id="prev-page" type="button" class="page-link" th:if="${currentPage == 1}" disabled>
+						<i class="czi-arrow-left mr-2"></i>
+						<span th:text="#{buttons.prev}"></span>
+					</button>
+				</li>
+			</ul>
+			<ul id="pagination-pages" class="pagination">
+				<li class="page-item d-sm-none">
+					<th:span class="page-link page-link-static" th:text="${currentPage} + ' / ' + ${pages}"></th:span>
+				</li>
+				<th:block th:each="i: ${#numbers.sequence(1, pages == 0 ? 1 : pages)}">
+					<li th:if="${i == currentPage}" class="page-item active d-none d-sm-block" aria-current="page">
+						<span id="current-page" th:text="${i}" class="page-link"></span>
+					</li>
+					<li th:if="${i != currentPage}" class="page-item d-none d-sm-block">
+						<button th:text="${i}" class="page-link"></button>
+					</li>
+				</th:block>
+			</ul>
+			<ul class="pagination">
+				<li class="page-item">
+					<button id="next-page" type="button" class="page-link"
+						th:if="${currentPage != pages}">
+						<span th:text="#{buttons.next}"></span>
+						<i class="czi-arrow-right ml-2"></i>
+					</button>
+					<button id="next-page" type="button" class="page-link"
+						 th:if="${currentPage == pages}" disabled>
+						<span th:text="#{buttons.next}"></span>
+						<i class="czi-arrow-right ml-2"></i>
+					</button>
+				</li>
+			</ul>
+		</nav>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<div th:fragment="filter" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+		<aside class="col-lg-4">
+			<!-- Sidebar-->
+			<div class="cz-sidebar rounded-lg box-shadow-lg" id="shop-sidebar">
+				<div class="cz-sidebar-header box-shadow-sm">
+					<button class="close ml-auto" type="button" data-dismiss="sidebar" aria-label="Close">
+						<th:span th:text="#{buttons.closeSidebar}" class="d-inline-block font-size-xs font-weight-normal align-middle"></th:span>
+						<span class="d-inline-block align-middle ml-2" aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="cz-sidebar-body" data-simplebar data-simplebar-auto-hide="true">
+					<div class="widget widget-categories mb-4 pb-4 border-bottom">
+						<!--Ingredients-->
+						<div class="mb-4 pb-4 border-bottom">
+							<h3 class="widget-title" th:text="#{filter.ingredients}"></h3>
+							<div>
+								<label th:text="#{filter.includeIngredient}"></label>
+								<select class="form-control ingredient-product selectpicker" name="foodProductsInclude"
+										data-live-search="true" data-style="form-control" multiple id="includeIngredient"></select>
+							</div>
+							<div>
+								<label th:text="#{filter.excludeIngredient}"></label>
+								<select class="form-control ingredient-product selectpicker" name="foodProductsExclude"
+										data-live-search="true" data-style="form-control" multiple id="excludeIngredient"></select>
+							</div>
+						</div>
+						<!--Diets-->
+						<div class="widget cz-filter mb-4 pb-4 border-bottom">
+							<h3 th:text="#{filter.diet}" class="widget-title"></h3>
+							<div class="input-group-overlay input-group-sm mb-2">
+								<input class="cz-filter-search form-control form-control-sm appended-form-control" type="text" th:placeholder="#{filter.placeholder.search}">
+								<div class="input-group-append-overlay"><span class="input-group-text"><i class="czi-search"></i></span></div>
+							</div>
+							<ul id="diets" class="widget-list cz-filter-list list-unstyled pt-1"
+								style="max-height: 12rem;" data-simplebar data-simplebar-auto-hide="false">
+								<li class="cz-filter-item d-flex justify-content-between align-items-center mb-1" th:each="diet: ${diets}">
+									<div class="custom-control custom-checkbox">
+										<input class="custom-control-input" type="checkbox" th:id="${diet.id}">
+										<label class="custom-control-label cz-filter-item-text" th:for="${diet.id}"
+											   th:text="${diet.localization(#locale)}"></label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<!--Prep time-->
+						<div class="widget mb-4 pb-4 border-bottom">
+							<h3 class="widget-title" th:text="#{filter.prepTime}"></h3>
+							<div class="cz-range-slider" data-start-min="0" data-start-max="20" data-min="0" data-max="60" data-step="1">
+								<div class="cz-range-slider-ui"></div>
+								<div class="d-flex pb-1">
+									<div class="w-50 pr-2 mr-2">
+										<div class="input-group input-group-sm">
+											<input class="form-control cz-range-slider-value-min" type="text" id="min-prep-time">
+											<div class="input-group-prepend"><span class="input-group-text" th:text="#{filter.minutes}"></span></div>
+										</div>
+									</div>
+									<div class="w-50 pl-2">
+										<div class="input-group input-group-sm">
+											<input class="form-control cz-range-slider-value-max" type="text" id="max-prep-time">
+											<div class="input-group-prepend"><span class="input-group-text"th:text="#{filter.minutes}"></span></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--Cooking time-->
+						<div class="widget mb-4 pb-4 border-bottom">
+							<h3 class="widget-title" th:text="#{filter.cookingTime}"></h3>
+							<div class="cz-range-slider" data-start-min="0" data-start-max="60" data-min="0" data-max="240" data-step="1">
+								<div class="cz-range-slider-ui"></div>
+								<div class="d-flex">
+									<div class="w-50 pr-2 mr-2">
+										<div class="input-group input-group-sm">
+											<input class="form-control cz-range-slider-value-min" type="text" id="min-cooking-time">
+											<div class="input-group-prepend">
+												<span class="input-group-text" th:text="#{filter.minutes}"></span>
+											</div>
+										</div>
+									</div>
+									<div class="w-50 pl-2">
+										<div class="input-group input-group-sm">
+											<input class="form-control cz-range-slider-value-max" type="text" id="max-cooking-time">
+											<div class="input-group-prepend">
+												<span class="input-group-text" th:text="#{filter.minutes}"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--Cooking method-->
+						<div class="widget cz-filter mb-4 pb-4">
+							<h3 class="widget-title" th:text="#{filter.cookingMethod}"></h3>
+							<div class="input-group-overlay input-group-sm mb-2">
+								<input class="cz-filter-search form-control form-control-sm appended-form-control" 
+									type="text" th:placeholder="#{filter.placeholder.search}">
+								<div class="input-group-append-overlay"><span class="input-group-text"><i class="czi-search"></i></span></div>
+							</div>
+							<ul id="cooking-methods" class="widget-list cz-filter-list list-unstyled pt-1" style="max-height: 12rem;" 
+								data-simplebar data-simplebar-auto-hide="false">
+								<li th:each="cookingMethod: ${cookingMethods}"
+									class="cz-filter-item d-flex justify-content-between align-items-center mb-1">
+									<div class="custom-control custom-checkbox">
+										<input class="custom-control-input" type="checkbox" th:id="${cookingMethod.id}">
+										<label class="custom-control-label cz-filter-item-text" th:for="${cookingMethod.id}"
+											th:text="${cookingMethod.localization(#locale)}"></label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<!--Cooking method-->
+						<div class="widget cz-filter mb-4 pb-4">
+							<h3 class="widget-title" th:text="#{filter.additionalParameters}"></h3>
+							<ul id="additional-parameters" class="widget-list cz-filter-list list-unstyled pt-1" style="max-height: 12rem;"
+								data-simplebar data-simplebar-auto-hide="false">
+								<li class="cz-filter-item d-flex justify-content-between align-items-center mb-1">
+									<div class="custom-control custom-checkbox">
+										<input class="custom-control-input" type="checkbox" id="first-meal-breakfast" checked>
+										<label class="custom-control-label cz-filter-item-text" for="first-meal-breakfast"
+											   th:text="#{filter.additionalParameters.isFirstMealBreakfast}"></label>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</aside>
+	</div>
+
+	<div th:fragment="generatorFields" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+		<div id="generatorFilter" class="form">
+			<div class="form-group">
+				<label for="daysAmount" th:text="#{generator.daysAmount}"></label>
+				<select id="daysAmount" th:field="*{filter.daysAmount}" class="custom-select"
+						th:classappend="${#fields.hasErrors('filter.daysAmount')}?is-invalid">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+				</select>
+				<div th:text="#{messages.error.generator.mealsnumber}" class="invalid-feedback"></div>
+			</div>
+			<div class="form-group">
+		      	<label for="mealsNumber" th:text="#{generator.mealsnumber}"></label>
+			    <select id="mealsNumber" th:field="*{filter.mealsNumber}" class="custom-select" 
+		      		th:classappend="${#fields.hasErrors('filter.mealsNumber')}?is-invalid">
+		      		<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+			    </select>
+      			<div th:text="#{messages.error.generator.mealsnumber}" class="invalid-feedback"></div>
+		    </div>
+		    <div>
+	    		<button type="button" class="btn btn-outline-primary" id="generatorFilterButton" th:text="#{buttons.generate}"></button>
+	    	</div>
+		</div>
+	</div>
+	
+	<div th:fragment="generatorResult" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+		<div id="generatorResult">
+			<div class="mt-3" th:include="fragments/general.html :: messages"></div>
+			<div class="mt-3" th:if="${not #lists.isEmpty(generatedMeals)}"></div>
+			<div class="mb-5 table-responsive">
+				<div th:each="recipeList,iteratorList: ${generatedMeals}">
+					<div th:utext="'<strong>' + #{generator.day} + ${iteratorList.index + 1} + '</strong>'"></div>
+					<table class="table mb-5">
+						<tbody>
+							<tr  class="d-flex" th:each="recipe,iterator: ${recipeList}">
+								<td class="col-2"><img class="img-fluid shadow rounded-lg" width="100" th:src="${recipe.imageUrl}"></td>
+								<td class="col-8">
+									<a class="h6" th:text="${recipe.localization(#locale)}" th:id="${recipe.id}" th:href="|@{/recipes/show/}${recipe.id}?lang=${#locale}|"></a>
+								</td>
+								<td>
+									<button type="button" class="ml-2 mb-1 close">
+										<i class="h2 text-body czi-loading"></i>
+									</button>
+									<span class="spinner-border ml-2 d-none" role="status"></span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<button th:if="${not #lists.isEmpty(generatedMeals)}" type="button" class="btn btn-outline-primary mb-4 "
+					id="shoppingListButton" th:text="#{buttons.generateShoppingList}"></button>
+			<div id="shoppingList"></div>
+		</div>
+	</div>
+	
+	<div th:fragment="generatedMeal" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+		<tr  class="d-flex">
+			<td class="col-2"><img class="img-fluid shadow rounded-lg" width="100" th:src="${recipe.imageUrl}"></td>
+			<td class="col-8">
+				<a class="h6" th:text="${recipe.localization(#locale)}" th:id="${recipe.id}" th:href="|@{/recipes/show/}${recipe.id}?lang=${#locale}|"></a>
+			</td>
+			<td>
+				<button type="button" class="ml-2 mb-1 close">
+					<i class="h2 text-body czi-loading"></i>
+				</button>
+				<span class="spinner-border ml-2 d-none" role="status"></span>
+			</td>
+		</tr>
+	</div>
+	
+	<div th:fragment="shoppingList" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+		<div id="shoppingList">
+			<div class="h6" th:text="#{generator.shoppingList}"></div>
+			<ol class="list-style">
+				<th:block th:each="item,iter: ${shoppingList}">
+					<li >
+						<span
+								th:text="${item.foodProduct.localization(#locale)}"></span>
+						<span th:if="${item.amount != null}"
+							th:text="${#numbers.formatDecimal(item.amount, 0,
+									T(Math).round(item.amount) == item.amount ? 0 : 1)} + ' ' + ${item.measure.localization(#locale)}"></span>
+					</li>
+				</th:block>
+			</ol>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,2 @@
+create table t_diet_description (id bigint not null, ru_locale longtext, en_locale longtext, diet_id bigint not null, primary key (id)) engine=InnoDB;
+alter table t_diet_description add constraint fk_diet_description_diet_id foreign key (diet_id) references t_diet (id);

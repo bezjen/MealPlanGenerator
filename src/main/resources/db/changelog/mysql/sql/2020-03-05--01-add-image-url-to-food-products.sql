@@ -1,0 +1,1 @@
+alter table t_food_product add column image_url varchar(255) default '/img/ingredientThumbnail.png' not null;

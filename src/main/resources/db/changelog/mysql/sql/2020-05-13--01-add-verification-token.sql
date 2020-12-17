@@ -1,0 +1,2 @@
+create table t_verification_token (id bigint not null, token varchar(36) not null, exp_date datetime not null, user_id bigint not null, primary key (id)) engine=InnoDB;
+alter table t_verification_token add constraint fk_verification_token_user_id foreign key (user_id) references t_user (id);

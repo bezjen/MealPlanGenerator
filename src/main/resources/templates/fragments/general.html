@@ -1,0 +1,297 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:fragment="head">
+	<meta charset="utf-8">
+   	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title th:text="${title}"></title>
+   	<meta name="description" th:if="${description != ''}" th:content="${description}">
+	<meta name="keywords" th:if="${keywords != null}" th:content="${keywords}">
+	<!-- Favicon and Touch Icons-->
+	<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="mask-icon" color="#fe6a6a" href="safari-pinned-tab.svg">
+	<!-- Vendor Styles including: Font Icons, Plugins, etc.-->
+	<link rel="stylesheet" media="screen" href="/css/vendor.min.css">
+	<!-- Main Theme Styles + Bootstrap-->
+	<link rel="stylesheet" media="screen" id="main-styles" href="/css/theme.min.css">
+	<link rel="stylesheet" media="screen" href="/css/whattoeat.css">
+</head>
+<body>
+	<div th:fragment="authorization" th:remove="tag">
+		<div class="modal-content">
+			<div class="modal-header">
+				<ul class="nav nav-tabs card-header-tabs" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" th:href="${#strings.concat('#signin-tab', suffix)}" 
+							data-toggle="tab" role="tab" aria-selected="true" th:text="#{general.signIn}">
+							<i class="czi-unlocked mr-2 mt-n1"></i>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="${#strings.concat('#signup-tab', suffix)}" 
+							data-toggle="tab" role="tab" aria-selected="false" th:text="#{general.signUp}">
+							<i class="czi-user mr-2 mt-n1"></i>
+						</a>
+					</li>
+				</ul>
+				<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span></button>
+			</div>
+			<div class="modal-body tab-content py-4">
+				<form action="/signin" method="POST" class="needs-validation tab-pane fade show active" autocomplete="off" 
+						novalidate th:id="${#strings.concat('signin-tab', suffix)}">
+					<div class="form-group">
+						<label th:for="${#strings.concat('si-email', suffix)}" th:text="#{signin.emailOrUsername}"></label>
+						<input class="form-control" name="username" th:id="${#strings.concat('si-email', suffix)}" 
+							th:placeholder="#{signin.emailOrUsername.placeholder}" required>
+						<div th:text="#{messages.error.signin.emailOrUsername.empty}" class="invalid-feedback"></div>
+					</div>
+					<div class="form-group">
+						<label th:text="#{signin.password}" th:for="${#strings.concat('si-password', suffix)}"></label>
+						<div class="password-toggle">
+							<input class="form-control" type="password" name="password" th:id="${#strings.concat('si-password', suffix)}" required>
+							<label class="password-toggle-btn">
+								<input class="custom-control-input" type="checkbox">
+								<i class="czi-eye password-toggle-indicator"></i>
+								<span th:text="#{signin.password.show}" class="sr-only"></span>
+							</label>
+						</div>
+					</div>
+					<div class="form-group d-flex flex-wrap justify-content-between">
+						<div class="custom-control custom-checkbox mb-2">
+							<input class="custom-control-input" type="checkbox" name="remember-me"
+								th:id="${#strings.concat('si-remember', suffix)}" checked>
+							<label th:text="#{signin.rememberMe}" class="custom-control-label" 
+									th:for="${#strings.concat('si-remember', suffix)}"></label>
+						</div>
+<!-- 						<a th:text="#{signin.forgotPassword}" class="font-size-sm" href="#"></a> -->
+					</div>
+					<button th:text="#{buttons.signin}" class="btn btn-primary btn-block btn-shadow" type="submit"></button>
+				</form>
+				<form action="/signup" method="POST" class="needs-validation tab-pane fade" autocomplete="off" 
+						novalidate th:id="${#strings.concat('signup-tab', suffix)}">
+					<div class="form-group">
+						<label th:text="#{signup.username}" th:for="${#strings.concat('su-name', suffix)}"></label>
+						<input name="username" class="form-control" type="text" maxlength="30"
+							th:id="${#strings.concat('su-name', suffix)}" th:placeholder="#{signup.username.placeholder}" required>
+						<div class="invalid-feedback"></div>
+					</div>
+					<div class="form-group">
+						<label th:text="#{signup.email}" th:for="${#strings.concat('su-email', suffix)}"></label>
+						<input name="email" class="form-control" type="email" maxlength="50"
+							th:id="${#strings.concat('su-email', suffix)}" th:placeholder="#{signup.email.placeholder}" required>
+						<div class="invalid-feedback"></div>
+					</div>
+					<div class="form-group">
+						<label th:text="#{signup.password}" th:for="${#strings.concat('su-password', suffix)}"></label>
+							<input name="password" class="form-control" maxlength="100" type="password" 
+									th:id="${#strings.concat('su-password', suffix)}" required>
+							<div th:text="#{messages.error.signup.password.length}" class="invalid-feedback"></div>
+					</div>
+					<div class="form-group">
+						<label th:text="#{signup.password.confirm}" th:for="${#strings.concat('su-password-confirm', suffix)}"></label>
+						<input name="passwordConfirm" class="form-control" type="password" 
+								th:id="${#strings.concat('su-password-confirm', suffix)}" required>
+						<div th:text="#{messages.success.signup.passwords.match}" class="valid-feedback"></div>
+						<div th:text="#{messages.error.signup.passwords.match}" class="invalid-feedback"></div>
+					</div>
+					<button th:text="#{buttons.signup}" class="btn btn-primary btn-block btn-shadow" type="submit"></button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div id="messages" th:fragment="messages">
+		<div id="error-panel" th:if="${error != null}" class="alert alert-primary alert-with-icon" role="alert">
+			<div class="alert-icon-box">
+				<i class="alert-icon czi-bell"></i>
+			</div>
+			<span th:text="${error}"></span>
+		</div>
+		<div id="warning-panel" th:if="${warning != null}" class="alert alert-warning alert-with-icon" role="alert">
+			<div class="alert-icon-box">
+				<i class="alert-icon czi-bell"></i>
+			</div>
+			<span th:text="${warning}"></span>
+		</div>
+		<div id="info-panel" th:if="${info != null}" class="alert alert-success alert-with-icon" role="alert">
+			<div class="alert-icon-box">
+				<i class="alert-icon czi-check-circle"></i>
+			</div>
+			<span th:text="${info}"></span>
+		</div>
+	</div>
+
+	<div th:fragment="header" th:remove="tag">
+		<!-- Sign in / sign up modal-->
+		<div class="modal fade" id="signin-modal" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-dialog-centered" role="document"
+				th:include="fragments/general.html :: authorization"></div>
+		</div>
+		<!-- Navbar 1 Level (Light)-->
+		<!-- Remove "navbar-sticky" class to make navigation bar scrollable with the page.-->
+		<header class="bg-light box-shadow-sm navbar-sticky">
+			<div class="navbar navbar-expand-lg navbar-light">
+				<div class="container">
+					<a class="navbar-brand d-none d-sm-block mr-4 order-lg-1" href="/" style="min-width: 7rem;">
+						<img width="142" src="/img/logo-dark.fw9" alt="WhatToEat"/>
+					</a>
+					<a class="navbar-brand d-sm-none mr-2 order-lg-1" href="/" style="min-width: 4.625rem;">
+						<img width="74" src="/img/logo-icon.fw9" alt="WhatToEat"/>
+					</a>
+					<div class="navbar-toolbar d-flex align-items-center order-lg-3">
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<a class="nav-link-style d-flex align-items-center px-4 py-3" href="/recipes/add">
+							<div class="navbar-tool-icon-box"><i class="navbar-tool-icon czi-edit"></i></div>
+							<div class="navbar-tool-text ml-n3" th:text="#{general.suggestRecipe}"></div>
+						</a>
+						<a sec:authorize="!isAuthenticated()" class="navbar-tool ml-1 mr-n1" href="#signin-modal" data-toggle="modal">
+							<span class="navbar-tool-tooltip" th:text="#{general.myAccount}"></span>
+							<div class="navbar-tool-icon-box"><i class="navbar-tool-icon czi-user"></i></div>
+							<div class="navbar-tool-text ml-n3" th:utext="'<small>' + #{general.helloSI} + '</small>' + #{general.myAccount}"></div>
+						</a>
+						<a sec:authorize="isAuthenticated()" class="navbar-tool ml-1 mr-n1" href="/account">
+							<span class="navbar-tool-tooltip" th:text="#{general.myAccount}"></span>
+							<div class="navbar-tool-icon-box"><i class="navbar-tool-icon czi-user"></i></div>
+							<div class="navbar-tool-text ml-n3" th:utext="'<small>' + #{general.hello} + ', ' + ${#authentication.getPrincipal().getUsername()} + '</small>' + #{general.myAccount}"></div>
+						</a>
+					</div>
+
+					<div class="collapse navbar-collapse mr-auto order-lg-2" id="navbarCollapse">
+						<!-- Primary menu-->
+						<ul class="navbar-nav">
+							<li class="nav-item dropdown"><a th:text="#{general.pages.recipes}" href="/recipes" class="nav-link"></a></li>
+							<li class="nav-item dropdown"><a th:text="#{general.pages.mealplangenerator}" href="/generator" class="nav-link"></a></li>
+							<li class="nav-item dropdown">
+								<a th:text="#{general.pages.additionalInfo}" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"></a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" href="/foodproducts" th:text="#{general.pages.foodProducts}"></a></li>
+									<li><a class="dropdown-item" href="/diets" th:text="#{general.pages.diets}"></a></li>
+								</ul>
+							</li>
+							<li class="nav-item dropdown" sec:authorize="hasAuthority('ROLE_ADMIN')">
+								<a th:text="#{general.pages.admin}" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"></a>
+								<ul class="dropdown-menu">
+									<li class="dropdown">
+										<a class="dropdown-item dropdown-toggle" href="#" th:text="#{general.pages.recipes}" data-toggle="dropdown"></a>
+										<ul class="dropdown-menu">
+											<li><a class="dropdown-item" href="/admin/recipes" th:text="#{general.pages.recipes.all}"></a></li>
+											<li><a class="dropdown-item" href="/admin/recipes/localization" th:text="#{general.pages.recipes.localizeRecipes}"></a></li>
+											<li><a class="dropdown-item" href="/admin/recipes/categories" th:text="#{general.pages.recipes.categories}"></a></li>
+										</ul>
+									</li>
+									<li class="dropdown">
+										<a class="dropdown-item dropdown-toggle" href="#" th:text="#{general.pages.foodProducts}" data-toggle="dropdown"></a>
+										<ul class="dropdown-menu">
+											<li><a class="dropdown-item" href="/admin/foodproducts" th:text="#{general.pages.foodProducts.all}"></a></li>
+											<li><a class="dropdown-item" href="/admin/foodproducts/categories" th:text="#{general.pages.foodProducts.categories}"></a></li>
+											<li><a class="dropdown-item" href="/admin/foodproducts/categorygroups" th:text="#{general.pages.foodProducts.categoryGroups}"></a></li>
+										</ul>
+									</li>
+									<li><a class="dropdown-item" href="/admin/measures" th:text="#{general.pages.measures}"></a></li>
+									<li><a class="dropdown-item" href="/admin/cookingmethods" th:text="#{general.pages.cookingMethods}"></a></li>
+									<li><a class="dropdown-item" href="/admin/diets" th:text="#{general.pages.diets}"></a></li>
+									<li><a class="dropdown-item" href="/admin/users" th:text="#{general.pages.users}"></a></li>
+								</ul>
+							</li>
+							<li class="nav-item dropdown" sec:authorize="hasAuthority('ROLE_MODERATOR')">
+								<a th:text="#{general.pages.admin}" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"></a>
+								<ul class="dropdown-menu">
+									<li class="dropdown">
+										<a class="dropdown-item dropdown-toggle" href="#" th:text="#{general.pages.recipes}" data-toggle="dropdown"></a>
+										<ul class="dropdown-menu">
+											<li><a class="dropdown-item" href="/admin/recipes/localization" th:text="#{general.pages.recipes.localizeRecipes}"></a></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</header>
+		<div class="bg-secondary py-4">
+			<div class="container d-lg-flex justify-content-between py-2 py-lg-3">
+				<div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
+					<nav aria-label="breadcrumb">
+						<ol id="breadcrumb" class="breadcrumb flex-lg-nowrap justify-content-center justify-content-lg-star">
+						</ol>
+					</nav>
+				</div>
+				<div class="order-lg-1 pr-lg-4 text-center text-lg-left">
+					<h1 class="h3 mb-0"></h1>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div th:fragment="footer" th:remove="tag">
+		<footer class="bg-dark pt-5">
+			<div class="container">
+				<div class="row pb-2">
+					<div class="col-md-4 col-sm-6">
+						<div class="widget widget-links widget-light pb-2 mb-4">
+							<h3 class="widget-title text-light">What to eat</h3>
+							<ul class="widget-list">
+<!--								<li class="widget-list-item">-->
+<!--									<a href="/feedback" class="widget-list-link" th:text="#{general.footer.feedback}"></a>-->
+<!--								</li>-->
+								<li class="widget-list-item">
+									<a class="widget-list-link" href="mailto:support@whattoeat.info" th:text="#{general.footer.contactUs}"></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-4 col-sm-6">
+						<div class="widget widget-links widget-light pb-2 mb-4">
+							<h3 class="widget-title text-light" th:text="#{general.footer.account}"></h3>
+							<ul class="widget-list">
+								<li class="widget-list-item">
+									<a href="/account" class="widget-list-link" th:text="#{general.footer.yourAccount}"></a>
+								</li>
+								<li class="widget-list-item">
+									<a href="/account/recipes" class="widget-list-link" th:text="#{general.footer.yourRecipes}"></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="pt-5 bg-darker">
+				<div class="container">
+					<div class="row pb-2">
+						<div class="col-md-6 text-center text-md-left mb-4">
+							<div class="text-nowrap mb-4">
+								<a class="d-inline-block align-middle mt-n1 mr-3" href="#">
+									<img class="d-block" width="117" src="/img/footer-logo-light.png" alt="What to eat"/>
+								</a>
+								<div id="languages" class="btn-group dropdown disable-autohide">
+								</div>
+							</div>
+
+						</div>
+						<div class="col-md-6 text-center text-md-right mb-4">
+						</div>
+					</div>
+					<hr class="hr-light pb-4 mb-3">
+					<div class="pb-4 font-size-xs text-light opacity-50 text-center text-md-left">© All rights reserved.</div>
+				</div>
+			</div>
+		</footer>
+		<!-- JavaScript libraries, plugins and custom scripts-->
+		<script src="/js/vendor.min.js" type="text/javascript"></script>
+		<script src="/js/theme.min.js" type="text/javascript"></script>
+		<script src="/js/js.cookie.js" type="text/javascript"></script>
+		<script src="/js/whattoeat/general.js" type="text/javascript"></script>
+		<script src="/js/whattoeat/breadcrumb.js" type="text/javascript"></script>
+		<script src="/js/whattoeat/changeLanguage.js" type="text/javascript"></script>
+		<script src="/js/whattoeat/ajaxUtils.js" type="text/javascript"></script>
+		<script src="/js/whattoeat/utils.js" type="text/javascript"></script>
+		<script src="/js/whattoeat/signupModal.js" type="text/javascript"></script>
+	</div>
+</body>
+</html>

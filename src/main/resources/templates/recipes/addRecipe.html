@@ -1,0 +1,248 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: head"></head>
+<link rel="stylesheet" href="/css/bootstrap-select.min.css">
+<link rel="stylesheet" href="/css/ajax-bootstrap-select.css">
+<style>
+	.custom-file-input:lang(en) ~ .custom-file-label::after {
+	  content: "[[#{buttons.upload.image.selectfilewithoutarea}]]";
+	}
+	.custom-file-label::after {
+	  content: "[[#{buttons.upload.image.selectfilewithoutarea}]]";
+	}
+</style>
+<body>
+	<header th:insert="fragments/general.html :: header" th:remove="tag"></header>
+	<main role="main" class="py-5">
+		<div class="container bg-light shadow rounded py-5 px-5">
+			<form id="formId" method="POST" enctype="multipart/form-data">
+				<div id="messages" th:include="fragments/general.html :: messages"></div>
+				<div>
+					<div class="form-group row">
+						<label for="recipeName" class="col-sm-2 col-form-label" th:text="#{recipe.name}"></label>
+						<div class="col-sm-10">
+							<input id="recipeName" type="text" class="form-control" name="recipeName" maxlength="100">
+							<div class="invalid-feedback" th:text="#{messages.error.addRecipe.recipeName}"></div>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="recipeCategory" class="col-sm-2 col-form-label" th:text="#{recipe.category}"></label>
+						<div class="col-sm-10">
+							<select class="form-control custom-select" id="recipeCategory" name="recipeCategory"
+									data-size="15" data-live-search="true" th:title="#{selectpicker.recipeCategory}">
+								<option th:each="categoryGroup: ${parentCategories}" th:value="${categoryGroup.id}"
+										th:text="${categoryGroup.localization(#locale)}">
+								</option>
+								<optgroup th:each="categoryGroup: ${categoryGroups}"
+										  th:label="${categoryGroup.key.localization(#locale)}">
+									<option th:each="category: ${categoryGroup.value}" th:value="${category.id}"
+											th:text="${category.localization(#locale)}">
+									</option>
+								</optgroup>
+							</select>
+							<div class="invalid-feedback" th:text="#{messages.error.addRecipe.recipeCategory}"></div>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label" th:text="#{general.image}"></label>
+						<div class="col-sm-10">
+							<div class="cz-file-drop-area form-group">
+								<div class="cz-file-drop-icon czi-cloud-upload"></div>
+				                <span class="cz-file-drop-message" th:text="#{buttons.upload.image.recipe}"></span>
+				                <input id="recipeImage" name="recipeImage" class="cz-file-drop-input" type="file" accept="image/png, image/jpeg">
+				                <button class="cz-file-drop-btn btn btn-primary btn-sm mb-2" type="button" 
+				                		th:text="#{buttons.upload.image.selectfile}"></button>
+				                <small class="form-text text-muted" th:text="#{buttons.upload.image.maxsize}"></small>
+			                </div>
+							<div class="invalid-feedback" th:text="#{messages.error.addRecipe.recipeImage}"></div>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="recipeDescription" class="col-sm-2 col-form-label">
+							<label th:remove="tag" th:text="#{recipe.description}"></label>
+							<small class="form-text text-muted" th:text="#{form.optional}"></small>
+						</label>
+						<div class="col-sm-10">
+							<textarea id="recipeDescription" class="form-control" name="recipeDescription" rows="3" maxlength="1000"></textarea>
+						</div>
+					</div>
+					<!--Prep time-->
+					<div class="form-group row">
+						<label for="prepTime" class="col-md-2 col-form-label" th:text="#{recipe.prepTime}"></label>
+						<div class="col-sm-10">
+							<input type="number" class="form-control col-sm-2" min="1" max="90" placeholder="1-90"
+								id="prepTime" name="prepTime" th:title="#{label.addRecipe.prepTime}">
+							<div class="invalid-feedback"  th:text="#{messages.error.addRecipe.prepTime}"></div>
+						</div>
+					</div>
+					<!--Cooking time-->
+					<div class="form-group row">
+						<label for="cookingTime" class="col-md-2 col-form-label" th:text="#{recipe.cookingTime}"></label>
+						<div class="col-sm-10">
+							<input type="number" class="form-control col-sm-2" min="1" max="240" placeholder="1-240"
+								   id="cookingTime" name="cookingTime">
+							<div class="invalid-feedback" th:text="#{messages.error.addRecipe.cookingTime}"></div>
+						</div>
+					</div>
+					<!--Cooking methods-->
+					<div class="form-group row">
+						<label for="primaryCookingMethod" class="col-sm-2 col-form-label" th:text="#{recipe.primaryCookingMethod}"></label>
+						<div class="col-sm-10">
+							<select class="form-control custom-select" id="primaryCookingMethod" name="primaryCookingMethod" 
+								data-size="5" data-live-search="true" th:title="#{selectpicker.cookingMethod}">
+					        	<option th:each="cookingMethod: ${cookingMethods}" th:value="${cookingMethod.id}" 
+					        			th:text="${cookingMethod.localization(#locale)}">
+					        	</option>
+					      	</select>
+							<div class="invalid-feedback" th:text="#{messages.error.addRecipe.primaryCookingMethod}"></div>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="secondaryCookingMethods" class="col-sm-2 col-form-label">
+							<label th:remove="tag" th:text="#{recipe.secondaryCookingMethods}"></label>
+							<small class="form-text text-muted" th:text="#{form.optional}"></small>
+						</label>
+						<div class="col-sm-10">
+							<select multiple="multiple" class="form-control custom-select" id="secondaryCookingMethods" 
+								name="secondaryCookingMethods" data-size="5" data-live-search="true" th:title="#{selectpicker.cookingMethod}">
+					        	<option th:each="cookingMethod: ${cookingMethods}" th:value="${cookingMethod.id}" 
+					        			th:text="${cookingMethod.localization(#locale)}">
+					        	</option>
+					      	</select>
+						</div>
+					</div>
+					<hr>
+					<!--Servings number-->
+					<div class="form-group row mt-3">
+						<label for="servingsNumber" class="col-md-2 col-form-label" th:text="#{recipe.servingsNumber}"></label>
+						<div class="col-sm-10">
+							<input type="number" class="form-control col-sm-2" min="1" max="99" placeholder="1-99"
+								   id="servingsNumber" name="servingsNumber">
+							<div class="invalid-feedback" th:text="#{messages.error.addRecipe.servingsNumber}"></div>
+						</div>
+					</div>
+					<!--Ingredients-->
+					<label for="recipeIngredients" class="col-form-label" th:text="#{recipe.ingredients} + ':'"></label>
+					<small class="form-text row ml-1">
+						<div th:utext="#{recipe.ingredients.tipText}" th:remove="tag"></div>
+						<a href="mailto:support@whattoeat.info" th:text="#{recipe.ingredients.tipLink}"></a>
+					</small>
+					<div id="recipeIngredients" class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr>
+									<th><label th:text="#{recipe.ingredient.foodProductName}"></label></th>
+									<th><label th:text="#{recipe.ingredient.amount}"></label></th>
+									<th><label th:text="#{recipe.ingredient.measure}"></label></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="recipe-ingredient">
+									<td>
+										<select class="form-control custom-select ingredient-product" th:title="#{selectpicker.foodProduct}"
+												name="foodProducts" data-size="5" data-live-search="true">
+											<optgroup th:each="foodProductGroup: ${foodProducts}" 
+												th:label="${foodProductGroup.key.localization(#locale)}">
+												<option th:each="foodProduct: ${foodProductGroup.value}" th:value="${foodProduct.id}" 
+								        			th:text="${foodProduct.localization(#locale)}">
+								        		</option>
+										  	</optgroup>
+								      	</select>
+										<div class="invalid-feedback" th:text="#{messages.error.addRecipe.ingredient.foodProductName}"></div>
+									</td>
+									<td>
+										<input name="amounts" type="tel" class="form-control ingredient-amount" placeholder="1-999">
+										<div class="invalid-feedback" th:text="#{messages.error.addRecipe.ingredient.amount}"></div>
+									</td>
+									<td>
+										<select class="form-control custom-select ingredient-measure" th:title="#{selectpicker.measure}"
+												id="measures" data-size="5" name="measures" data-live-search="true">
+								        	<option th:each="measure: ${measures}" th:value="${measure.id}" 
+								        			th:text="${measure.localization(#locale)}">
+								        	</option>
+								      	</select>
+										<div class="invalid-feedback" th:text="#{messages.error.addRecipe.ingredient.measure}"></div>
+									</td>
+									<td>
+										<i class="h4 text-body czi-add"></i>
+									</td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<hr>
+					<!--Directions-->
+					<label for="directions" class="col-form-label" th:text="#{recipe.directions} + ':'"></label>
+					<div id="directions" class="table-responsive">
+						<table class="table">
+							<tbody>
+								<tr class="recipe-step d-flex">
+									<td class="col-10">
+										<div>
+											<textarea name="steps" class="form-control step-text" maxlength="1000"></textarea>
+											<div class="invalid-feedback" th:text="#{messages.error.addRecipe.step}"></div>
+										</div>
+				                        <div class="custom-file mt-1">
+				                          <input name="stepsImages" class="custom-file-input step-image" type="file" accept="image/png, image/jpeg" id="step-image-1">
+				                          <label class="custom-file-label" for="step-image-1"></label>
+				                        </div>
+										<div class="invalid-feedback" th:text="#{messages.error.addRecipe.stepImage}"></div>
+									</td>
+									<td class="col-1">
+										<i class="h4 text-body czi-add"></i>
+									</td>
+									<td class="col-1">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<hr>
+					<!--Additional parameters-->
+					<label class="col-form-label" th:text="#{recipe.additionalParams} + ':'"></label>
+					<hr>
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label" th:text="#{recipe.isSnack}"></label>
+						<div class="custom-control custom-checkbox mt-2 ml-3">
+							<input class="custom-control-input" name="snack" type="checkbox" id="isSnack">
+							<label class="custom-control-label" for="isSnack"></label>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label" th:text="#{recipe.isBreakfastOrBrunch}"></label>
+						<div class="custom-control custom-checkbox mt-2 ml-3">
+							<input class="custom-control-input" name="breakfastOrBrunch" type="checkbox" id="isBreakfastOrBrunch">
+							<label class="custom-control-label" for="isBreakfastOrBrunch"></label>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="dietaryOptions" class="col-sm-2 col-form-label">
+							<label th:remove="tag" th:text="#{recipe.dietaryOptions}"></label>
+							<small class="form-text text-muted" th:text="#{form.optional}"></small>
+						</label>
+						<div class="col-sm-10">
+							<select multiple="multiple" class="form-control custom-select" id="dietaryOptions"
+									name="dietaryOptions" data-size="5" data-live-search="true" th:title="#{selectpicker.dietaryOptions}">
+								<option th:each="dietaryOption: ${dietaryOptions}" th:value="${dietaryOption.id}"
+										th:text="${dietaryOption.localization(#locale)}">
+								</option>
+							</select>
+						</div>
+					</div>
+					<button id="addRecipe" type="button"
+						class="btn btn-outline-primary btn-lg btn-block" th:text="#{buttons.addRecipe}"></button>
+				</div>
+			</form>
+		</div>
+	</main>
+	<div th:replace="fragments/general.html :: footer"></div>
+	<script src="/js/bootstrap-select.js"></script>
+	<script src="/js/bootstrap-select-ru.js"></script>
+	<script>var toTasteText = "[[#{toTasteText}]]";</script>
+	<script>var tooManyImagesText = "[[#{tooManyImagesText}]]";</script>
+	<script src="/js/whattoeat/addRecipe.js"></script>
+</body>
+</html>

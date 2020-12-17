@@ -1,0 +1,1 @@
+alter table t_recipe_ingredient drop column is_optional;
